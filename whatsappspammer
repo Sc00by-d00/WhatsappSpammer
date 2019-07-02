@@ -1,0 +1,102 @@
+# -*- coding: utf-8 -*-
+
+# Form implementation generated from reading ui file 'whatsappspam.ui'
+#
+# Created by: PyQt5 UI code generator 5.10.1
+#
+# WARNING! All changes made in this file will be lost!
+from selenium import webdriver
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.by import By
+import time
+from PyQt5 import QtCore, QtGui, QtWidgets
+
+class Ui_MainWindow(object):
+    def setupUi(self, MainWindow):
+        MainWindow.setObjectName("MainWindow")
+        MainWindow.resize(800, 600)
+        self.centralwidget = QtWidgets.QWidget(MainWindow)
+        self.centralwidget.setObjectName("centralwidget")
+        self.gridLayout_2 = QtWidgets.QGridLayout(self.centralwidget)
+        self.gridLayout_2.setObjectName("gridLayout_2")
+        self.label = QtWidgets.QLabel(self.centralwidget)
+        self.label.setObjectName("label")
+        self.gridLayout_2.addWidget(self.label, 0, 0, 1, 1)
+        self.lineEdit = QtWidgets.QLineEdit(self.centralwidget)
+        self.lineEdit.setObjectName("lineEdit")
+        self.gridLayout_2.addWidget(self.lineEdit, 0, 1, 1, 1)
+        self.label_2 = QtWidgets.QLabel(self.centralwidget)
+        self.label_2.setObjectName("label_2")
+        self.gridLayout_2.addWidget(self.label_2, 1, 0, 1, 1)
+        self.textEdit = QtWidgets.QTextEdit(self.centralwidget)
+        self.textEdit.setObjectName("textEdit")
+        self.gridLayout_2.addWidget(self.textEdit, 1, 1, 1, 1)
+        self.label_3 = QtWidgets.QLabel(self.centralwidget)
+        self.label_3.setObjectName("label_3")
+        self.gridLayout_2.addWidget(self.label_3, 2, 0, 1, 1)
+        self.spinBox = QtWidgets.QSpinBox(self.centralwidget)
+        self.spinBox.setObjectName("spinBox")
+        self.gridLayout_2.addWidget(self.spinBox, 2, 1, 1, 1)
+        self.pushButton = QtWidgets.QPushButton(self.centralwidget)
+        self.pushButton.setObjectName("pushButton")
+        self.gridLayout_2.addWidget(self.pushButton, 3, 1, 1, 1)
+        MainWindow.setCentralWidget(self.centralwidget)
+        self.menubar = QtWidgets.QMenuBar(MainWindow)
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 800, 26))
+        self.menubar.setObjectName("menubar")
+        MainWindow.setMenuBar(self.menubar)
+        self.statusbar = QtWidgets.QStatusBar(MainWindow)
+        self.statusbar.setObjectName("statusbar")
+        MainWindow.setStatusBar(self.statusbar)
+
+        self.retranslateUi(MainWindow)
+        QtCore.QMetaObject.connectSlotsByName(MainWindow)
+
+    def retranslateUi(self, MainWindow):
+        _translate = QtCore.QCoreApplication.translate
+        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        self.label.setText(_translate("MainWindow", "Enter Friend\'s Name"))
+        self.label_2.setText(_translate("MainWindow", "Enter Message"))
+        self.label_3.setText(_translate("MainWindow", "Frequency"))
+        self.pushButton.setText(_translate("MainWindow", "Spam "))
+        self.pushButton.clicked.connect(self.spamfriend)
+
+    def spamfriend(self):
+        person='"'+self.lineEdit.text()+'"'
+        msg=self.textEdit.toPlainText()
+        freq=int(self.spinBox.value())
+        startspammingfriend(person,msg,freq)
+
+
+def startspammingfriend(person,msg,freq):
+    driver = webdriver.Firefox()
+
+    driver.get("https://web.whatsapp.com/")
+    wait = WebDriverWait(driver, 600)
+    target = person
+
+    # Replace the below string with your own message
+    string = msg
+
+    x_arg = '//span[contains(@title,' + target + ')]'
+    group_title = wait.until(EC.presence_of_element_located((
+        By.XPATH, x_arg)))
+    group_title.click()
+    inp_xpath = '//div[@class="_3u328 copyable-text selectable-text"][@dir="ltr"][@data-tab="1"]'
+    input_box = wait.until(EC.presence_of_element_located((
+        By.XPATH, inp_xpath)))
+    for i in range(freq):
+        input_box.send_keys(string + Keys.ENTER)
+        time.sleep(1)
+
+
+if __name__ == "__main__":
+    import sys
+    app = QtWidgets.QApplication(sys.argv)
+    MainWindow = QtWidgets.QMainWindow()
+    ui = Ui_MainWindow()
+    ui.setupUi(MainWindow)
+    MainWindow.show()
+    sys.exit(app.exec_())
