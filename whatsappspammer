@@ -38,6 +38,7 @@ class Ui_MainWindow(object):
         self.gridLayout_2.addWidget(self.label_3, 2, 0, 1, 1)
         self.spinBox = QtWidgets.QSpinBox(self.centralwidget)
         self.spinBox.setObjectName("spinBox")
+        self.spinBox.setMaximum(9999999)
         self.gridLayout_2.addWidget(self.spinBox, 2, 1, 1, 1)
         self.pushButton = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton.setObjectName("pushButton")
